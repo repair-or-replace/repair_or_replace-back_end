@@ -1,7 +1,15 @@
 from rest_framework import serializers
-from .models import Product
+from .models import Property, Appliance, Repairs, Investments
+from django.contrib.auth.models import User
 
-class ProductSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Product
-        fields = ['id', 'title', 'manufacturer', 'manufactured_date']
+        model = User
+        fields = ['id', 'email', 'email']
+
+class PropertySerialier(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Property
+        fields = '__all__'

@@ -36,6 +36,7 @@ class Appliance(models.Model):
     serial_number = models.CharField(max_length=200)
     brand = models.CharField(max_length=200)
     property = models.ForeignKey('Property', on_delete=models.CASCADE, related_name='appliances')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appliances') 
     exp_end_of_life = models.DateField()
     purchase_date = models.DateField()
     current_status = models.CharField(max_length=20, choices=STATUS_CHOICES) #
@@ -60,7 +61,7 @@ class Investments(models.Model):
     INVESTMENT_CHOICES = [
         ('replacement', 'Replacement'),
         ('maintenance', 'Maintenance'),
-        ('repair', 'Repair')
+        ('repair', 'Repair'),
         ('upgrade', 'Upgrade')
     ]
     appliance = models.ForeignKey(Appliance, on_delete=models.CASCADE, related_name='investments')  # Use ForeignKey

@@ -1,9 +1,21 @@
-# from rest_framework.views import APIView
-# from rest_framework.response import Response
-# from rest_framework import status
-# from .models import Product
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Property, Appliance, Repairs, Investments
+from django.views.generic import ListView
+
 # from .serializers import ProductSerializer
 # from rest_framework.generics import get_object_or_404
+
+class RepairList(ListView):
+    model = Repairs
+    template_name = 'repairs_list.html'
+    context_object_name = 'repairs'
+
+class Property(ListView):
+    model = Property
+    template_name = 'properties_list.html'
+    context_object_name = 'properties'
 
 # class ProductList(APIView):
 #     def get(self, request):
