@@ -6,7 +6,7 @@ cd myproject
 
 2. Create App
 
-python manage.py startapp products
+python manage.py startapp repair_management
 
 
 3. register
@@ -20,7 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',  # add Django REST Framework
-    'products',  # add books 
+    'repair_management',  # add books 
 ]
 
 

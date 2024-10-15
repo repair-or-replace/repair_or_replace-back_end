@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',  # Add Django REST Framework
-    'products',  # Add app
+    'repair_management',  # Add app
 ]
 
 
@@ -85,9 +85,9 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'product',  # database
+        'NAME': 'repair_or_replace',  # database
         'USER': 'root',       # username
-        'PASSWORD': 'root123',   # pwd
+        'PASSWORD': 'Tomatillo4!',   # pwd
         'HOST': 'localhost',           # local
         'PORT': '3306',                # port
     }
