@@ -12,7 +12,7 @@ class RepairList(ListView):
     template_name = 'repairs_list.html'
     context_object_name = 'repairs'
 
-class Property(ListView):
+class PropertyList(ListView):
     model = Property
     template_name = 'properties_list.html'
     context_object_name = 'properties'
