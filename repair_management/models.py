@@ -77,3 +77,40 @@ class Investments(models.Model):
     def __str__(self):
         return f"{self.appliance} ({self.investment_type})"
 
+
+class ApplianceDetailsFromAPI(models.Model):
+    appliance = models.ForeignKey(Appliance, on_delete=models.CASCADE, default=None, null=True)
+    created_at = models.DateTimeField()
+
+    def __str__(self):
+        return f"ApplianceDetailsFromAPI for {self.appliance} at {self.created_at}"
+
+class CustomUser(models.Model):
+
+    username = models.CharField(max_length=75)
+    password = models.CharField(max_length=75)
+    email = models.CharField(max_length=75)
+    name = models.CharField(max_length=100)
+    property_id = models.ForeignKey(Property, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField()
+
+    def __str__(self):
+        return f"CustomUser {self.id}: {self.username}"
+
+
+'''
+class CustomUser(models.Model):
+    id = models.IntegerField(primary_key=True)
+    username = models.CharField(max_length=75)
+    password = models.CharField(max_length=75)
+    email = models.CharField(max_length=75)
+    name = models.CharField(max_length=100)
+    property_id = models.ForeignKey(Property, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField()
+    # link User model
+    django_user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return f"CustomUser {self.id}: {self.username}"
+
+'''
