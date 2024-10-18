@@ -3,6 +3,8 @@ from rest_framework import serializers
 from.models import Property, Appliance, Repairs, Investments, ApplianceDetailsFromAPI, CustomUser
 from django.contrib.auth.models import User
 
+#this file tells us how to turn our model into JSON data
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

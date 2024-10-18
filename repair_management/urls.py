@@ -12,6 +12,10 @@ router.register('appliance-details-from-api', ApplianceDetailsFromAPIViewSet)
 router.register('custom-users', CustomUserViewSet)
 router.register('users', UserViewSet)
 
+#the paths of the endpoints
+#this file maps URLs to view. 
+#when a user accesses a specific URL, django check the urls.py to determine which view to call
+
 urlpatterns = [
     path('', include(router.urls)),
 ]

@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User 
 
+#models define the data structure of the app. they represent the tabels in your DB and define the fields and relationship between them
+#django uses models to generate SQL code to create and manipulate the corresponding DB tables
+
 
 class Property(models.Model):
     HOME_TYPE_CHOICES = [
