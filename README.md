@@ -206,8 +206,7 @@ The following is an example of the steps to perform CRUD operations on users in 
 1). Create a user (POST request)
 Open Postman.
 POST  http://127.0.0.1:8000/api/users/
-Enter the following JSON data to represent a new user:
-json
+
 {
     "username": "newuser",
     "password": "newpassword",
@@ -222,14 +221,86 @@ get information about a single user.
 
 3). Update User (PUT/PATCH Request)
 http://127.0.0.1:8000/api/users/{user_id}/.
-Enter the following JSON data to represent the user information to be updated:
-json
+
 {
     "username": "updateduser",
     "email": "updateduser@example.com"
 }
-Click Sendthe button to send the request. If the update is successful, you will receive a response with a status code of 200 (OK) and the response body contains the updated user information.
+
 4). Deleting a user (DELETE request)
-Create a new request and set the request method to DELETE.
-Enter the API endpoint address of the user you want to delete, such as http://127.0.0.1:8000/api/users/{user_id}/.
-Click Sendthe button to send the request. If the deletion is successful, you will receive a response with status code 204 (No Content).
+
+http://127.0.0.1:8000/api/users/{user_id}/.
+
+
+1. Other simulated data for testing.
+
+1). Property Model
+POST: http://127.0.0.1:8000/api/properties/
+{
+    "address_line_1": "123 Main St",
+    "city": "Anytown",
+    "state": "CA",
+    "zipcode": "12345",
+    "home_type": "single",
+    "year_built": "2000-01-01",
+    "user": 2 // make sure user:2 exists(need create a new user)
+}
+
+2). Appliance Model
+POST :http://127.0.0.1:8000/api/appliances/
+
+{
+    "name": "Refrigerator",
+    "model": "Model X",
+    "serial_number": "123456",
+    "brand": "Brand X",
+    "property": 1, // make sure Property ID 1 exists
+    "user": 1, // User ID=1
+    "exp_end_of_life": "2025-01-01",
+    "purchase_date": "2020-01-01",
+    "current_status": "working",
+    "cost": 100.0
+}
+
+3). Repairs Model
+POST:http://127.0.0.1:8000/api/repairs/
+
+{
+    "appliance": 1, // already exists
+    "repair_date": "2024-10-18",
+    "repaired_by": "Repair Person",
+    "repaired_description": "Fixed a leak",
+    "cost": 100.0
+}
+
+4). Investments Model
+POST:http://127.0.0.1:8000/api/investments/
+
+{
+    "appliance": 1, // exists
+    "investment_type": "repair",
+    "investment_date": "2024-10-18",
+    "investment_description": "Invested in repair",
+    "cost": 50.0
+}
+
+5). ApplianceDetailsFromAPI Model
+POST:http://127.0.0.1:8000/api/appliance-details-from-api/
+
+{
+    "appliance": 1, 
+    "created_at": "2024-10-19T10:00:00Z"
+}
+
+
+6). CustomUser Model
+POST request URL: http://127.0.0.1:8000/api/custom-users/
+
+{
+    "username": "testuser",
+    "password": "testpassword",
+    "email": "test@example.com",
+    "name": "Test User",
+    "property_id": 1 ,
+    "created_at": "2024-10-19T10:00:00Z"
+}

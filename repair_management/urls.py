@@ -9,6 +9,7 @@ router.register('repairs', RepairsViewSet)
 router.register('investments', InvestmentsViewSet)
 router.register('appliance-details-from-api', ApplianceDetailsFromAPIViewSet)
 # router.register('users', CustomUserViewSet)
+router.register('custom-users', CustomUserViewSet)
 router.register('users', UserViewSet)
 
 urlpatterns = [

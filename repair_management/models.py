@@ -76,14 +76,14 @@ class Investments(models.Model):
 
 
 class ApplianceDetailsFromAPI(models.Model):
-    id = models.IntegerField(primary_key=True)
+    appliance = models.ForeignKey(Appliance, on_delete=models.CASCADE, default=None, null=True)
     created_at = models.DateTimeField()
 
     def __str__(self):
-        return f"ApplianceDetailsFromAPI {self.id} at {self.created_at}"
+        return f"ApplianceDetailsFromAPI for {self.appliance} at {self.created_at}"
 
 class CustomUser(models.Model):
-    id = models.IntegerField(primary_key=True)
+
     username = models.CharField(max_length=75)
     password = models.CharField(max_length=75)
     email = models.CharField(max_length=75)
