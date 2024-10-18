@@ -1,7 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
 
-url = "https://api.appliance-data.com/product"
+url = "https://api.appliance-data.com/brand?keyword=GE"
 
 headers = {
     "accept": "application/json",
