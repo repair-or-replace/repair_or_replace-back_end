@@ -1,6 +1,15 @@
 import requests
 
-url = "https://api.appliance-data.com/product"
+# url = "https://api.appliance-data.com/product"
+
+
+# url = "https://api.appliance-data.com/product?sku=AEL36DFBLK&brand=AGA" #worked
+
+
+url = "https://api.appliance-data.com/product?sku=PTD60EBSR0WS"
+
+
+
 
 headers = {
     "accept": "application/json",
@@ -9,6 +18,4 @@ headers = {
 
 response = requests.get(url, headers=headers)
 
-print(response.status_code)
-print(response.json())  # Use parentheses to properly call the method
 print(response.text)
