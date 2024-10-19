@@ -8,7 +8,7 @@ headers = {
   }
 
 json_data = {
-      'make': 'GE',
+      'make': 'GE', #will have to remove hardcoded variables and input user input
       'serial': 'VV135374G',
       'model': 'PTW600BSR1S',
   }
