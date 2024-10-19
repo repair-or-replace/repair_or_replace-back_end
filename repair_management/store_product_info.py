@@ -1,6 +1,6 @@
 import json
 from .models import ProductInfo
-from get_product import response
+from homespy import response
 
 data = json.loads(response)
 decoded = data['result']['decoded']
