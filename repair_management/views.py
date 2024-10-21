@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from django.contrib.auth.models import User
-from.models import Property, Appliance, Repairs, Investments, ApplianceDetailsFromAPI, CustomUser
-from.serializers import PropertySerializer, ApplianceSerializer, RepairsSerializer, InvestmentsSerializer, ApplianceDetailsFromAPISerializer, CustomUserSerializer, UserSerializer
+from.models import Property, Appliance, Repairs, Investments, AppApiInfo, CustomUser
+from.serializers import PropertySerializer, ApplianceSerializer, RepairsSerializer, InvestmentsSerializer, AppApiInfoSerializer, CustomUserSerializer, UserSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -30,9 +30,9 @@ class InvestmentsViewSet(viewsets.ModelViewSet):
     serializer_class = InvestmentsSerializer
     permission_classes = []
 
-class ApplianceDetailsFromAPIViewSet(viewsets.ModelViewSet):
-    queryset = ApplianceDetailsFromAPI.objects.all()
-    serializer_class = ApplianceDetailsFromAPISerializer
+class AppApiInfoViewSet(viewsets.ModelViewSet):
+    queryset = AppApiInfo.objects.all()
+    serializer_class = AppApiInfoSerializer
     permission_classes = [] #IsAuthenticatedOrReadOnly
 
 class CustomUserViewSet(viewsets.ModelViewSet):
