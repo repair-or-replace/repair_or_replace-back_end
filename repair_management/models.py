@@ -8,6 +8,9 @@ class AppApiInfo(models.Model):
     make = models.CharField(max_length=50)
     model = models.CharField(max_length=100)
     serial = models.CharField(max_length=100)
+    description = models.CharField(max_length=250)
+    type = models.CharField(max_length=50)
+    color = models.CharField(max_length=50)
     most_likely_year = models.IntegerField()
     average_listed_price = models.DecimalField(max_digits=10, decimal_places=2)
     full_date = models.DateTimeField()
@@ -32,10 +35,22 @@ class Property(models.Model):
     home_type = models.CharField(max_length=25, choices=HOME_TYPE_CHOICES)
     year_built = models.DateField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='properties')  # link to User
+    default_image = models.CharField(max_length=250, default='images/default_home_pic.jpeg')
+    user_uploaded_image = models.ImageField(upload_to='properties/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.address_line_1}, {self.city}"
+    
+    def image(self):
+        if self.user_uploaded_image:
+            return self.user_uploaded_image.url
+        return f'images/default_home_pic.jpeg'
+    
+# class ApplianceType(models.Model):
+#     name = models.CharField(max_length=50, unique=True)
+#     default_image = models.CharField(max_length=250, default=)
+
 
 class Appliance(models.Model):
     STATUS_CHOICES = [
