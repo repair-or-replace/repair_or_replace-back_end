@@ -3,8 +3,12 @@ from django.contrib.auth.models import User
 from.models import Property, Appliance, Repairs, Investments, AppApiInfo, CustomUser
 from.serializers import PropertySerializer, ApplianceSerializer, RepairsSerializer, InvestmentsSerializer, AppApiInfoSerializer, CustomUserSerializer, UserSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from django.http import JsonResponse
 from django.views import View
+from django.shortcuts import render
 import requests
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -43,9 +47,12 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     serializer_class = CustomUserSerializer
     permission_classes = [] #IsAuthenticatedOrReadOnly
 
-class DecodeApplianceView(View):
+def add_appliance_view(request):
+    return render(request, 'repair_management/templates/add_appliance.html')
+
+class DecodeApplianceView(APIView):
     def post(self, request):
-        data = request.POST
+        data = request.data
         brand = data.get('brand')
         model = data.get('model')
         serial_number = data.get('serial_number')
@@ -104,3 +111,6 @@ class DecodeApplianceView(View):
             return JsonResponse({'status': 'added', 'data': decoded_data})
 
         return JsonResponse(response.json(), status=response.status_code)
+    
+    def get(self, request):
+        return Response({'error': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
