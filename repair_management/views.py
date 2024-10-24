@@ -6,10 +6,12 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views import View
 from django.shortcuts import render
 import requests
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -47,18 +49,41 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     serializer_class = CustomUserSerializer
     permission_classes = [] #IsAuthenticatedOrReadOnly
 
-def add_appliance_view(request):
-    return render(request, 'repair_management/templates/add_appliance.html')
+class PropertyView(View):
+    def get(self, request, property_id):
+        property = Property.objects.get(id=property_id)
+        return render (request, 'view_property.html', {'property':property})
 
+def add_appliance_view(request):
+    print("add_appliance_view called")  # Debug print
+    return render(request, 'add_appliance.html')
+
+
+@method_decorator(csrf_exempt, name='dispatch')
 class DecodeApplianceView(APIView):
     def post(self, request):
         data = request.data
-        brand = data.get('brand')
+        print(f"Received data: {data}")
+        print(f"User: {request.user}")
+
+
+        #extract details from request dta
+        make = data.get('make')
         model = data.get('model')
         serial_number = data.get('serial_number')
+        user = request.user #get user submitting form
+        property_id = data.get('property_id')
+        print(f"Property ID: {property_id}")
+
+
+        try:
+            property_instance = Property.objects.get(id=property_id)
+        except Property.DoesNotExist:
+            return JsonResponse({'error': 'Property not found'}, status=status.HTTP_400_BAD_REQUEST)
+
 
         #chcekc if info already exists in AppApiInfo table
-        existing_info = AppApiInfo.objects.filter(make=brand, serial=serial_number, model=model).first()
+        existing_info = AppApiInfo.objects.filter(make=make, serial=serial_number, model=model).first()
 
         if existing_info:
             return JsonResponse({'status': 'found', 'data': {
@@ -77,23 +102,29 @@ class DecodeApplianceView(APIView):
             'Accept': 'application/json',
         }
         json_data = {
-            'make': brand,
+            'make': make,
             'serial': serial_number,
             'model': model
         }
         
-
+        print(f"Sending request to API with data: {json_data}")
         response = requests.get('https://homespy.io/api/decode', headers=headers, json=json_data)
 
-        
+        print(f"Received response from API: Status {response.status_code}")
+        print(f"Response content: {response.text}")
 
         if response.status_code == 200:
             api_data = response.json()
             decoded_data = api_data.get('result', {}).get('decoded',{})
 
-            most_likely_year = decoded_data.get('mostLikelyYear')
+            most_likely_year = str(decoded_data.get('mostLikelyYear')) 
             year_options = decoded_data.get('yearOptions')
             full_date_str = year_options[most_likely_year].get('fullDate')
+
+            print(year_options)
+            print()
+
+            print(f"Creating AppApiInfo with data: {decoded_data}")
 
             #save new data to AppApiInfo table
             AppApiInfo.objects.create(
@@ -107,6 +138,19 @@ class DecodeApplianceView(APIView):
                 color=decoded_data.get('details', {}).get('color'),
                 type=decoded_data.get('details', {}).get('type')
             )
+
+            appliance = Appliance.objects.create(
+            appliance_type=decoded_data.get('details',{}).get('type'),
+            model=decoded_data.get('model'),
+            make=decoded_data.get('make'),
+            serial_number=decoded_data.get('serial'),
+            property=property_instance,
+            user=user,
+            exp_end_of_life=full_date_str,  #
+            purchase_date=data.get('purchase_date'),  # Extract from the request data
+            current_status=data.get('current_status', 'working'),  # default status of working
+            cost=data.get('cost', 0.0),
+        )
 
             return JsonResponse({'status': 'added', 'data': decoded_data})
 

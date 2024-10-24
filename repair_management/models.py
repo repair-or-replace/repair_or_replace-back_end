@@ -5,9 +5,9 @@ from django.contrib.auth.models import User
 #django uses models to generate SQL code to create and manipulate the corresponding DB tables
 
 class AppApiInfo(models.Model):
-    make = models.CharField(max_length=50)
-    model = models.CharField(max_length=100)
-    serial = models.CharField(max_length=100)
+    make = models.CharField(max_length=50,null=True)
+    model = models.CharField(max_length=100,null=True)
+    serial = models.CharField(max_length=100,null=True)
     description = models.CharField(max_length=250,null=True)
     type = models.CharField(max_length=50,null=True)
     color = models.CharField(max_length=50, null=True)
@@ -33,7 +33,7 @@ class Property(models.Model):
     state = models.CharField(max_length=2)
     zipcode = models.CharField(max_length=10)
     home_type = models.CharField(max_length=25, choices=HOME_TYPE_CHOICES)
-    year_built = models.DateField()
+    year_built = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='properties')  # link to User
     default_image = models.CharField(max_length=250, default='images/default_home_pic.jpeg')
     user_uploaded_image = models.ImageField(upload_to='properties/', blank=True, null=True)
@@ -59,16 +59,16 @@ class Appliance(models.Model):
         ('broken', 'Broken'),
         ('replaced', 'Replaced')
     ]
-    name = models.CharField(max_length=200)
-    model = models.CharField(max_length=200)
+    appliance_type = models.CharField(max_length=200)
+    make = models.CharField(max_length=200,blank=True)
+    model = models.CharField(max_length=200,null=True,blank=True)
     serial_number = models.CharField(max_length=200)
-    brand = models.CharField(max_length=200)
     property = models.ForeignKey('Property', on_delete=models.CASCADE, related_name='appliances')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appliances') 
-    exp_end_of_life = models.DateField()
+    exp_end_of_life = models.DateField(blank=True,null=True)
     purchase_date = models.DateField()
     current_status = models.CharField(max_length=20, choices=STATUS_CHOICES) #
-    cost = models.FloatField()
+    cost = models.FloatField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
