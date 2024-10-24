@@ -6,7 +6,7 @@ import requests
 # url = "https://api.appliance-data.com/product?sku=AEL36DFBLK&brand=AGA" #worked
 
 
-url = "https://api.appliance-data.com/product?sku=PTD60EBSR0WS"
+url = "https://api.appliance-data.com/product?sku=JVW5301SJSS"
 
 
 

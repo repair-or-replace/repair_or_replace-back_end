@@ -1,9 +1,9 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from.views import PropertyViewSet, ApplianceViewSet, RepairsViewSet, InvestmentsViewSet, AppApiInfoViewSet, CustomUserViewSet, UserViewSet, DecodeApplianceView,add_appliance_view
+from.views import PropertyViewSet, ApplianceViewSet, RepairsViewSet, InvestmentsViewSet, AppApiInfoViewSet, CustomUserViewSet, UserViewSet, DecodeApplianceView,add_appliance_view, PropertyView
 
 router = DefaultRouter()
-router.register('properties', PropertyViewSet)
+router.register('properties', PropertyViewSet, basename='properties')
 router.register('appliances', ApplianceViewSet)
 router.register('repairs', RepairsViewSet)
 router.register('investments', InvestmentsViewSet)
@@ -18,7 +18,8 @@ router.register('users', UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('decode-appliance/', DecodeApplianceView.as_view(), name='decode_appliance'),
-    path('add-appliance/', add_appliance_view, name='add_appliance'),  # Add this line
+    path('decode-appliance/', DecodeApplianceView.as_view(), name='decode-appliance'),
+    path('add-appliance/', add_appliance_view, name='add_appliance'), 
+    # path('property/<int:property_id>/', PropertyView.as_view(), name='property_detail'),
 ]
 

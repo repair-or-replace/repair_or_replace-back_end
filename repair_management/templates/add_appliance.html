@@ -8,10 +8,11 @@
 </head>
 <body>
   <div>
-    <form id="applianceForm" method="POST" action="{% url 'decode_appliance' %}">
+    <form id="applianceForm" method="POST">
+        {% csrf_token %}
         <div class="mb-3">
-          <label for="brand" class="form-label">Brand</label>
-          <input type="text" class="form-control" id="brand" aria-describedby="brand">
+          <label for="make" class="form-label">Make</label>
+          <input type="text" class="form-control" id="make" aria-describedby="make">
         </div>
         <div class="mb-3">
           <label for="model" class="form-label">Model</label>
@@ -20,6 +21,10 @@
         <div class="mb-3">
             <label for="serial_number" class="form-label">Serial Number</label>
             <input type="text" class="form-control" id="serial_number" aria-describedby="serial number">
+        </div>
+        <div class="mb-3">
+          <label for="property_id" class="form-label">Property ID</label>
+          <input type="text" class="form-control" id="property_id" aria-describedby="property id">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
         <div id="message" class="mt-3"></div>
@@ -31,19 +36,30 @@
       document.getElementById('applianceForm').addEventListener('submit', function(event) {
           event.preventDefault(); 
 
-          const brand = document.getElementById('brand').value;
+          const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+          const make = document.getElementById('make').value;
           const model = document.getElementById('model').value;
           const serial_number = document.getElementById('serial_number').value;
+          const property_id = document.getElementById('property_id').value;
 
-          fetch('/decode-appliance/', {
+          console.log('Sending data:', {
+            make: make,
+            model: model,
+            serial_number: serial_number,
+            property_id: property_id
+    });
+
+          fetch('/api/decode-appliance/', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
-              },
+                  'X-CSRFToken': csrfToken,
+                },
               body: JSON.stringify({
-                  brand: brand,
+                  make: make,
                   model: model,
-                  serial_number: serial_number
+                  serial_number: serial_number,
+                  property_id : property_id
               }),
           })
           .then(response => response.json())
