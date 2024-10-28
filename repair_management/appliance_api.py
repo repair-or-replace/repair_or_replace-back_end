@@ -9,7 +9,16 @@ headers = {
 
 #filter by sku only
 
-url = "https://api.appliance-data.com/product?sku=JVW5301SJSS"
+# url = "https://api.appliance-data.com/product?sku=JVW5301SJSS"
+# response = requests.get(url, headers=headers)
+
+model = 'JVW5301SJSS'
+json_data = {
+            'model': model
+        }
+
+        
+url = f"https://api.appliance-data.com/product?sku={model}"
 response = requests.get(url, headers=headers)
 
 #uncomment to see result data
@@ -24,8 +33,8 @@ response = requests.get(url, headers=headers)
 # print(response.text)
 
 
-url = "https://api.appliance-data.com/product?brand=LG&sku=LCG3611BD"
-response = requests.get(url, headers=headers)
+# url = "https://api.appliance-data.com/product?brand=LG&sku=LCG3611BD"
+# response = requests.get(url, headers=headers)
 
 #uncomment to see result data
 print(response.text)
