@@ -64,42 +64,39 @@ class DecodeApplianceView(APIView):
     def post(self, request):
         data = request.data
         print(f"Received decoded_data: {data}")
-        print(f"User: {request.user}")
 
 
         #extract details from request dta
         model = data.get('model')
-        user = request.user #get user submitting form
         property_id = data.get('property_id')
+        user_id = data.get('user')
+        purchase_date = data.get('purchase_date')
         print(f"Property ID: {property_id}")
+        print("user:", user_id)
 
 
         try:
             property_instance = Property.objects.get(id=property_id)
         except Property.DoesNotExist:
             return JsonResponse({'error': 'Property not found'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-        #chcekc if info already exists in Appliance table
-        existing_info = ApplianceApi.objects.filter(model=model).first()
-
-        if existing_info:
-            return JsonResponse({'status': 'found', 'data': {
-                'brand': existing_info.brand,
-                'model': existing_info.model,
-                'description': existing_info.description,
-                'category': existing_info.category_name,
-                'detail_category': existing_info.detail_category_name,
-                'color': existing_info.color,
-                'product_image': existing_info.product_image,
-                'product_doc_1': existing_info.product_doc_1,
-                'product_doc_2': existing_info.product_doc_2,
-                'lowest_listed_price': existing_info.lowest_listed_price,
-                'homedepot_price': existing_info.home_depot_price,
-                'msrp': existing_info.msrp
-            }})
         
-        #if exact appliance is not found in AppApiInfo table
+        try:
+            user_instance = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'user not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+        #check if appliace with this model/sku # exists in user's Appliance table
+        existing_appliance = Appliance.objects.filter(model=model, property=property_instance).first()
+        if existing_appliance:
+            return JsonResponse({'message': 'Appliance already exists in this property'})
+
+        #chcekc if info already exists in Appliance API table
+        existing_info = ApplianceApi.objects.filter(model=model).first()
+        if existing_info:
+            return JsonResponse({'message': 'Appliance already exists in the Appliance API table'})
+              
+        
+        #if exact appliance is not found in Appliance API  table, do the following
 
         headers = {
             "accept": "application/json",
@@ -118,12 +115,7 @@ class DecodeApplianceView(APIView):
 
         if response.status_code == 200:
             data = response.json()
-            decoded_data = data.get('data')
-            # print("decoded_data", decoded_data)
-            print("brand=",decoded_data[0]['brand']['brand_name'])
-            print("category_name=",decoded_data[0].get('category', {}).get('category_name'))
-            print("lowest_price =" , decoded_data[0]["price"]["lap"]["lowest_price"])
-           
+            decoded_data = data.get('data')           
 
             #save new decoded_data to ApplianceApi table
             ApplianceApi.objects.create(
@@ -147,10 +139,10 @@ class DecodeApplianceView(APIView):
                 brand=decoded_data[0]['brand']['brand_name'],
                 model=decoded_data[0].get('sku'),
                 property=property_instance,
-                user=user,
-                exp_end_of_life= decoded_data[0].get('lifecycle', {}).get('exp_end_of_life'),
-                purchase_date= '9999-12-31',
-                current_status=decoded_data.get('current_status', 'working'),  # default status is working
+                user=user_instance,
+                exp_end_of_life= '9999-12-31',
+                purchase_date= purchase_date,
+                current_status='working',  # default status is working
                 cost=decoded_data[0].get('price',{}).get('msrp',0),
         )
 

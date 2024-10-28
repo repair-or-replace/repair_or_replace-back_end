@@ -15,6 +15,14 @@
           <input type="text" class="form-control" id="model" aria-describedby="model">
         </div>
         <div class="mb-3">
+          <label for="purchase_date" class="form-label">Purchase Date</label>
+          <input type="date" class="form-control" id="purchase_date" aria-describedby="purchase date">
+        </div>
+        <div class="mb-3">
+          <label for="user_id" class="form-label">User ID</label>
+          <input type="text" class="form-control" id="user_id" aria-describedby="user id">
+        </div>
+        <div class="mb-3">
           <label for="property_id" class="form-label">Property ID</label>
           <input type="text" class="form-control" id="property_id" aria-describedby="property id">
         </div>
@@ -31,10 +39,15 @@
           const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
           const model = document.getElementById('model').value;
           const property_id = document.getElementById('property_id').value;
+          const purchase_date = document.getElementById('purchase_date').value;
+          const user_id = document.getElementById('user_id').value;
+
 
           console.log('Sending data:', {
             model: model,
-            property_id: property_id
+            property_id: property_id,
+            user: user_id,
+            purchase_date
     });
 
           fetch('/api/decode-appliance/', {
@@ -45,7 +58,9 @@
                 },
               body: JSON.stringify({
                   model: model,
-                  property_id : property_id
+                  property_id : property_id,
+                  user: user_id,
+                  purchase_date: purchase_date
               }),
           })
           .then(response => response.json())
