@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 #models define the data structure of the app. they represent the tabels in your DB and define the fields and relationship between them
 #django uses models to generate SQL code to create and manipulate the corresponding DB tables
 
-class AppApiInfo(models.Model):
+class HomeSpy(models.Model):
     make = models.CharField(max_length=50,null=True)
     model = models.CharField(max_length=100,null=True)
     serial = models.CharField(max_length=100,null=True)
@@ -17,6 +17,25 @@ class AppApiInfo(models.Model):
     
 def __str__(self):
     return f"{self.make} {self.model} {self.serial}"
+
+class ApplianceApi(models.Model):
+    brand = models.CharField(max_length=50,null=True) #brand_name
+    model = models.CharField(max_length=100,null=True) #sku
+    description = models.CharField(max_length=250,null=True) #name of item
+    category_name = models.CharField(max_length=50,null=True)
+    detail_category_name = models.CharField(max_length=250, null=True)
+    color = models.CharField(max_length=30,null=True)
+    product_image = models.CharField(max_length=250, null=True)
+    product_doc_1 = models.CharField(max_length=250, null=True)
+    product_doc_2 = models.CharField(max_length=250, null=True)
+    lowest_listed_price = models.DecimalField(max_digits=10, decimal_places=2)
+    home_depot_price = models.DecimalField(max_digits=10, decimal_places=2)
+    msrp = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    
+def __str__(self):
+    return f"{self.brand} {self.model}"
 
 class Property(models.Model):
     HOME_TYPE_CHOICES = [
@@ -47,10 +66,6 @@ class Property(models.Model):
             return self.user_uploaded_image.url
         return f'images/default_home_pic.jpeg'
     
-# class ApplianceType(models.Model):
-#     name = models.CharField(max_length=50, unique=True)
-#     default_image = models.CharField(max_length=250, default=)
-
 
 class Appliance(models.Model):
     STATUS_CHOICES = [
@@ -60,9 +75,8 @@ class Appliance(models.Model):
         ('replaced', 'Replaced')
     ]
     appliance_type = models.CharField(max_length=200)
-    make = models.CharField(max_length=200,blank=True)
+    brand = models.CharField(max_length=200,blank=True)
     model = models.CharField(max_length=200,null=True,blank=True)
-    serial_number = models.CharField(max_length=200)
     property = models.ForeignKey('Property', on_delete=models.CASCADE, related_name='appliances')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appliances') 
     exp_end_of_life = models.DateField(blank=True,null=True)

@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from django.contrib.auth.models import User
-from.models import Property, Appliance, Repairs, Investments, AppApiInfo, CustomUser
-from.serializers import PropertySerializer, ApplianceSerializer, RepairsSerializer, InvestmentsSerializer, AppApiInfoSerializer, CustomUserSerializer, UserSerializer
+from.models import Property, Appliance, Repairs, Investments, ApplianceApi, CustomUser
+from.serializers import PropertySerializer, ApplianceSerializer, RepairsSerializer, InvestmentsSerializer, ApplianceApiSerializer, CustomUserSerializer, UserSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -39,9 +39,9 @@ class InvestmentsViewSet(viewsets.ModelViewSet):
     serializer_class = InvestmentsSerializer
     permission_classes = []
 
-class AppApiInfoViewSet(viewsets.ModelViewSet):
-    queryset = AppApiInfo.objects.all()
-    serializer_class = AppApiInfoSerializer
+class ApplianceApiViewSet(viewsets.ModelViewSet):
+    queryset = ApplianceApi.objects.all()
+    serializer_class = ApplianceApiSerializer
     permission_classes = [] #IsAuthenticatedOrReadOnly
 
 class CustomUserViewSet(viewsets.ModelViewSet):
@@ -63,96 +63,90 @@ def add_appliance_view(request):
 class DecodeApplianceView(APIView):
     def post(self, request):
         data = request.data
-        print(f"Received data: {data}")
-        print(f"User: {request.user}")
+        print(f"Received decoded_data: {data}")
 
 
         #extract details from request dta
-        make = data.get('make')
         model = data.get('model')
-        serial_number = data.get('serial_number')
-        user = request.user #get user submitting form
         property_id = data.get('property_id')
+        user_id = data.get('user')
+        purchase_date = data.get('purchase_date')
         print(f"Property ID: {property_id}")
+        print("user:", user_id)
 
 
         try:
             property_instance = Property.objects.get(id=property_id)
         except Property.DoesNotExist:
             return JsonResponse({'error': 'Property not found'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-        #chcekc if info already exists in AppApiInfo table
-        existing_info = AppApiInfo.objects.filter(make=make, serial=serial_number, model=model).first()
-
-        if existing_info:
-            return JsonResponse({'status': 'found', 'data': {
-                'make': existing_info.make,
-                'model': existing_info.model,
-                'serial': existing_info.serial,
-                'most_likely_year': existing_info.most_likely_year,
-                'average_listed_price': str(existing_info.average_listed_price),
-                'full_date':existing_info.full_date.isoformat()
-            }})
         
-        #if exact appliance is not found in AppApiInfo table
+        try:
+            user_instance = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'user not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+        #check if appliace with this model/sku # exists in user's Appliance table
+        existing_appliance = Appliance.objects.filter(model=model, property=property_instance).first()
+        if existing_appliance:
+            return JsonResponse({'message': 'Appliance already exists in this property'})
+
+        #chcekc if info already exists in Appliance API table
+        existing_info = ApplianceApi.objects.filter(model=model).first()
+        if existing_info:
+            return JsonResponse({'message': 'Appliance already exists in the Appliance API table'})
+              
+        
+        #if exact appliance is not found in Appliance API  table, do the following
 
         headers = {
-            'Authorization': 'Bearer o2RKpcz05F28TLva6ghPOQ6dCaBwJJEjebupGCV3h69RirpDOT7VFgUFwx8N',
-            'Accept': 'application/json',
+            "accept": "application/json",
+            "Authorization" : "Bearer QWtZTDlsbTUrTGhPanBLZVRKblVYaEZoN3M5V3BKYWVNOFRJVStVVk1ZUWhMM3RwOEZRUVZNZDBqNmpncFFsaXJ4TEIwZWVQMUlVQXN5RkdDNFFYOFlTTFR5TDA2NGUxWnRoeG8vbmh0QWtDOW13NUsvRTJObDdPY21oeXVnMVR3a3ZRNE1hS1NhK2ZqNGVLaitIVng3ekd3NW5HQ3g5N0hONjlpdytmM0ZEV2FUZG10c3c3QURnRStCZm9rYzB1anpLUjdpUW90SUpTcXdtWmRVTU5UZz09"
         }
         json_data = {
-            'make': make,
-            'serial': serial_number,
             'model': model
         }
-        
-        print(f"Sending request to API with data: {json_data}")
-        response = requests.get('https://homespy.io/api/decode', headers=headers, json=json_data)
 
-        print(f"Received response from API: Status {response.status_code}")
-        print(f"Response content: {response.text}")
+        
+        url = f"https://api.appliance-data.com/product?sku={model}"
+        response = requests.get(url, headers=headers)
+
+        # print(f"Received response from API: Status {response.status_code}")
+        # print(f"Response content: {response.text}")
 
         if response.status_code == 200:
-            api_data = response.json()
-            decoded_data = api_data.get('result', {}).get('decoded',{})
+            data = response.json()
+            decoded_data = data.get('data')           
 
-            most_likely_year = str(decoded_data.get('mostLikelyYear')) 
-            year_options = decoded_data.get('yearOptions')
-            full_date_str = year_options[most_likely_year].get('fullDate')
-
-            print(year_options)
-            print()
-
-            print(f"Creating AppApiInfo with data: {decoded_data}")
-
-            #save new data to AppApiInfo table
-            AppApiInfo.objects.create(
-                make=decoded_data.get('make'),
-                model=decoded_data.get('model'),
-                serial=decoded_data.get('serial'),
-                description=decoded_data.get('details', {}).get('description'),
-                most_likely_year=most_likely_year,
-                average_listed_price=decoded_data.get('details', {}).get('averageListedPrice', 0.0),
-                full_date=full_date_str,
-                color=decoded_data.get('details', {}).get('color'),
-                type=decoded_data.get('details', {}).get('type')
+            #save new decoded_data to ApplianceApi table
+            ApplianceApi.objects.create(
+                brand=decoded_data[0]['brand']['brand_name'],
+                model=decoded_data[0].get('sku'),  
+                description=decoded_data[0].get('name'),  
+                category_name=decoded_data[0].get('category', {}).get('category_name'),  
+                detail_category_name=decoded_data[0].get('detail_category', {}).get('detail_category_name'),  # Ame
+                color=decoded_data[0].get('color'),  # Accessing color
+                product_image=decoded_data[0]['product_images'][0]['url'] if decoded_data[0]['product_images'] else None,  # first product image URL
+                product_doc_1=decoded_data[0]['product_documents'][0]['url'] if decoded_data[0]['product_documents'] else None,  # e first product document URL
+                product_doc_2=decoded_data[0]['product_documents'][1]['url'] if len(decoded_data[0]['product_documents']) > 1 else None,  # second product document URL
+                lowest_listed_price=decoded_data[0]["price"]["lap"]["lowest_price"],  
+                home_depot_price=decoded_data[0]["price"]["lap"]["homedepot_price"],  
+                msrp=decoded_data[0].get('price', {}).get('msrp', 0),
             )
 
-            appliance = Appliance.objects.create(
-            appliance_type=decoded_data.get('details',{}).get('type'),
-            model=decoded_data.get('model'),
-            make=decoded_data.get('make'),
-            serial_number=decoded_data.get('serial'),
-            property=property_instance,
-            user=user,
-            exp_end_of_life=full_date_str,  #
-            purchase_date=data.get('purchase_date'),  # Extract from the request data
-            current_status=data.get('current_status', 'working'),  # default status of working
-            cost=data.get('cost', 0.0),
+
+            Appliance.objects.create(
+                appliance_type=decoded_data[0].get('category', {}).get('category_name'),
+                brand=decoded_data[0]['brand']['brand_name'],
+                model=decoded_data[0].get('sku'),
+                property=property_instance,
+                user=user_instance,
+                exp_end_of_life= '9999-12-31',
+                purchase_date= purchase_date,
+                current_status='working',  # default status is working
+                cost=decoded_data[0].get('price',{}).get('msrp',0),
         )
 
-            return JsonResponse({'status': 'added', 'data': decoded_data})
+            return JsonResponse({'status': 'added', 'decoded_data': decoded_data})
 
         return JsonResponse(response.json(), status=response.status_code)
     

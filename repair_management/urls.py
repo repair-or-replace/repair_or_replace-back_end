@@ -1,13 +1,13 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from.views import PropertyViewSet, ApplianceViewSet, RepairsViewSet, InvestmentsViewSet, AppApiInfoViewSet, CustomUserViewSet, UserViewSet, DecodeApplianceView,add_appliance_view, PropertyView
+from.views import PropertyViewSet, ApplianceViewSet, RepairsViewSet, InvestmentsViewSet, ApplianceApiViewSet, CustomUserViewSet, UserViewSet, DecodeApplianceView,add_appliance_view, PropertyView
 
 router = DefaultRouter()
 router.register('properties', PropertyViewSet, basename='properties')
 router.register('appliances', ApplianceViewSet)
 router.register('repairs', RepairsViewSet)
 router.register('investments', InvestmentsViewSet)
-router.register('appliance-details-from-api', AppApiInfoViewSet)
+router.register('appliance-details-from-api', ApplianceApiViewSet)
 # router.register('users', CustomUserViewSet)
 router.register('custom-users', CustomUserViewSet)
 router.register('users', UserViewSet)

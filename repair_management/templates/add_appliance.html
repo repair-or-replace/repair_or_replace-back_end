@@ -11,16 +11,16 @@
     <form id="applianceForm" method="POST">
         {% csrf_token %}
         <div class="mb-3">
-          <label for="make" class="form-label">Make</label>
-          <input type="text" class="form-control" id="make" aria-describedby="make">
-        </div>
-        <div class="mb-3">
           <label for="model" class="form-label">Model</label>
           <input type="text" class="form-control" id="model" aria-describedby="model">
         </div>
         <div class="mb-3">
-            <label for="serial_number" class="form-label">Serial Number</label>
-            <input type="text" class="form-control" id="serial_number" aria-describedby="serial number">
+          <label for="purchase_date" class="form-label">Purchase Date</label>
+          <input type="date" class="form-control" id="purchase_date" aria-describedby="purchase date">
+        </div>
+        <div class="mb-3">
+          <label for="user_id" class="form-label">User ID</label>
+          <input type="text" class="form-control" id="user_id" aria-describedby="user id">
         </div>
         <div class="mb-3">
           <label for="property_id" class="form-label">Property ID</label>
@@ -37,16 +37,17 @@
           event.preventDefault(); 
 
           const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-          const make = document.getElementById('make').value;
           const model = document.getElementById('model').value;
-          const serial_number = document.getElementById('serial_number').value;
           const property_id = document.getElementById('property_id').value;
+          const purchase_date = document.getElementById('purchase_date').value;
+          const user_id = document.getElementById('user_id').value;
+
 
           console.log('Sending data:', {
-            make: make,
             model: model,
-            serial_number: serial_number,
-            property_id: property_id
+            property_id: property_id,
+            user: user_id,
+            purchase_date
     });
 
           fetch('/api/decode-appliance/', {
@@ -56,10 +57,10 @@
                   'X-CSRFToken': csrfToken,
                 },
               body: JSON.stringify({
-                  make: make,
                   model: model,
-                  serial_number: serial_number,
-                  property_id : property_id
+                  property_id : property_id,
+                  user: user_id,
+                  purchase_date: purchase_date
               }),
           })
           .then(response => response.json())
