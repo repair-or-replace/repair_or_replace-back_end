@@ -1,6 +1,8 @@
-1. Repair or Replace ERD(click the img.png)
+Updated Register, Login, Reset Password
 
-![img.png](img.png)
+
+
+1. Repair or Replace ERD(click the img.png)
 
 2. Follow the ERD, create the models.py
 use Django DRF
