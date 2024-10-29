@@ -7,6 +7,8 @@ from django.shortcuts import render
 import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from repair_management.models import Property, Appliance, ApplianceApi
+
 
 def add_appliance_view(request):
     print("add_appliance_view called")  # Debug print
