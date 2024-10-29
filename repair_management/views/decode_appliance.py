@@ -8,6 +8,7 @@ import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from repair_management.models import Property, Appliance, ApplianceApi
+from django.conf import settings
 
 
 def add_appliance_view(request):
@@ -56,7 +57,7 @@ class DecodeApplianceView(APIView):
 
         headers = {
             "accept": "application/json",
-            "Authorization" : "Bearer QWtZTDlsbTUrTGhPanBLZVRKblVYaEZoN3M5V3BKYWVNOFRJVStVVk1ZUWhMM3RwOEZRUVZNZDBqNmpncFFsaXJ4TEIwZWVQMUlVQXN5RkdDNFFYOFlTTFR5TDA2NGUxWnRoeG8vbmh0QWtDOW13NUsvRTJObDdPY21oeXVnMVR3a3ZRNE1hS1NhK2ZqNGVLaitIVng3ekd3NW5HQ3g5N0hONjlpdytmM0ZEV2FUZG10c3c3QURnRStCZm9rYzB1anpLUjdpUW90SUpTcXdtWmRVTU5UZz09"
+            "Authorization" : settings.AUTH_KEY
         }
         json_data = {
             'model': model
