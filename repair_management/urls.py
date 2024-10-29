@@ -4,18 +4,18 @@ from .views.views import (
     PropertyViewSet,
     ApplianceViewSet,
     RepairsViewSet,
+    ApplianceApiViewSet,
     InvestmentsViewSet,
-    AppApiInfoViewSet,
     UserViewSet,
-    DecodeApplianceView,
     UserPropertyViewSet,
 )
+from .views.decode_appliance import DecodeApplianceView, add_appliance_view
 from .views.signup import RegisterView
 from .views.login import LoginView
 from .views.reset_password import ResetPasswordView
 
 router = DefaultRouter()
-router.register(r'user-properties', UserPropertyViewSet, basename='user-properties')
+router.register('user-properties', UserPropertyViewSet, basename='user-properties')
 router.register('properties', PropertyViewSet, basename='properties')
 router.register('appliances', ApplianceViewSet)
 router.register('repairs', RepairsViewSet)
@@ -29,6 +29,8 @@ router.register('users', UserViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('decode-appliance/', DecodeApplianceView.as_view(), name='decode-appliance'),
+    path('add-appliance/', add_appliance_view, name='add_appliance'), 
+
 
     # New paths for signup, login, and reset password
     path('signup/', RegisterView.as_view(), name='signup'),

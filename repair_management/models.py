@@ -15,8 +15,8 @@ class HomeSpy(models.Model):
     average_listed_price = models.DecimalField(max_digits=10, decimal_places=2)
     full_date = models.DateTimeField()
     
-def __str__(self):
-    return f"{self.make} {self.model} {self.serial}"
+    def __str__(self):
+        return f"{self.make} {self.model} {self.serial}"
 
 class ApplianceApi(models.Model):
     brand = models.CharField(max_length=50,null=True) #brand_name
@@ -34,8 +34,8 @@ class ApplianceApi(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     
-def __str__(self):
-    return f"{self.brand} {self.model}"
+    def __str__(self):
+        return f"{self.brand} {self.model}"
 
 class Property(models.Model):
     HOME_TYPE_CHOICES = [
@@ -47,7 +47,7 @@ class Property(models.Model):
     ]
 
     address_line_1 = models.CharField(max_length=100)
-    # address_line_2 = models.CharField(max_length=100, blank=True, null=True)
+    address_line_2 = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=20)
     state = models.CharField(max_length=2)
     zipcode = models.CharField(max_length=10)
