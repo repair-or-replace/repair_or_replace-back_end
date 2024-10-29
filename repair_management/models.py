@@ -28,7 +28,7 @@ class Property(models.Model):
     ]
 
     address_line_1 = models.CharField(max_length=100)
-    address_line_2 = models.CharField(max_length=100, blank=True, null=True)
+    # address_line_2 = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=20)
     state = models.CharField(max_length=2)
     zipcode = models.CharField(max_length=10)
@@ -59,6 +59,7 @@ class Appliance(models.Model):
         ('broken', 'Broken'),
         ('replaced', 'Replaced')
     ]
+    name = models.CharField(max_length=255, default='default_name')
     appliance_type = models.CharField(max_length=200)
     make = models.CharField(max_length=200,blank=True)
     model = models.CharField(max_length=200,null=True,blank=True)
@@ -103,17 +104,17 @@ class Investments(models.Model):
         return f"{self.appliance} ({self.investment_type})"
     
 
-class CustomUser(models.Model):
+# class CustomUser(models.Model):
 
-    username = models.CharField(max_length=75)
-    password = models.CharField(max_length=75)
-    email = models.CharField(max_length=75)
-    name = models.CharField(max_length=100)
-    property_id = models.ForeignKey(Property, on_delete=models.SET_NULL, null=True)
-    created_at = models.DateTimeField()
+#     username = models.CharField(max_length=75)
+#     password = models.CharField(max_length=75)
+#     email = models.CharField(max_length=75)
+#     name = models.CharField(max_length=100)
+#     property_id = models.ForeignKey(Property, on_delete=models.SET_NULL, null=True)
+#     created_at = models.DateTimeField()
 
-    def __str__(self):
-        return f"CustomUser {self.id}: {self.username}"
+#     def __str__(self):
+#         return f"CustomUser {self.id}: {self.username}"
 
 
 '''

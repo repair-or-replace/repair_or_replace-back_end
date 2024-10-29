@@ -1,62 +1,58 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from django.contrib.auth.models import User
-from.models import Property, Appliance, Repairs, Investments, AppApiInfo, CustomUser
-from.serializers import PropertySerializer, ApplianceSerializer, RepairsSerializer, InvestmentsSerializer, AppApiInfoSerializer, CustomUserSerializer, UserSerializer
+from repair_management.models import Property, Appliance, Repairs, Investments, AppApiInfo
+from repair_management.serializers import PropertySerializer, ApplianceSerializer, RepairsSerializer, InvestmentsSerializer, AppApiInfoSerializer, UserSerializer, UserPropertySerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.views import View
-from django.shortcuts import render
 import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
+class UserPropertyViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserPropertySerializer
+
+    def list(self, request, pk=None):
+        if pk:
+            users = User.objects.filter(pk=pk)
+        else:
+            users = User.objects.all()
+        serializer = UserPropertySerializer(users, many=True)
+        return Response(serializer.data)
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [] #IsAuthenticatedOrReadOnly
+    permission_classes = [IsAuthenticatedOrReadOnly] 
 
 
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
     serializer_class = PropertySerializer
-    permission_classes = [] #IsAuthenticatedOrReadOnly
+    permission_classes = [IsAuthenticatedOrReadOnly] 
 
 class ApplianceViewSet(viewsets.ModelViewSet):
     queryset = Appliance.objects.all()
     serializer_class = ApplianceSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class RepairsViewSet(viewsets.ModelViewSet):
     queryset = Repairs.objects.all()
     serializer_class = RepairsSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class InvestmentsViewSet(viewsets.ModelViewSet):
     queryset = Investments.objects.all()
     serializer_class = InvestmentsSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class AppApiInfoViewSet(viewsets.ModelViewSet):
     queryset = AppApiInfo.objects.all()
     serializer_class = AppApiInfoSerializer
-    permission_classes = [] #IsAuthenticatedOrReadOnly
-
-class CustomUserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-    permission_classes = [] #IsAuthenticatedOrReadOnly
-
-class PropertyView(View):
-    def get(self, request, property_id):
-        property = Property.objects.get(id=property_id)
-        return render (request, 'view_property.html', {'property':property})
-
-def add_appliance_view(request):
-    print("add_appliance_view called")  # Debug print
-    return render(request, 'add_appliance.html')
+    permission_classes = [IsAuthenticatedOrReadOnly] 
 
 
 @method_decorator(csrf_exempt, name='dispatch')
