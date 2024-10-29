@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'repair_or_replace',  # database
         'USER': 'root',       # username
-        'PASSWORD': 'Tomatillo4!',   # pwd
+        'PASSWORD': 'root123',   # pwd
         'HOST': 'localhost',           # local
         'PORT': '3306',                # port
     }
