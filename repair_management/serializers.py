@@ -35,9 +35,10 @@ class InvestmentsSerializer(serializers.ModelSerializer):
         model = Investments
         fields = '__all__'
 
-class AppApiInfoSerializer(serializers.ModelSerializer):
+class ApplianceApiSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AppApiInfo
+        model = ApplianceApi
         fields = '__all__'
+
 
 
