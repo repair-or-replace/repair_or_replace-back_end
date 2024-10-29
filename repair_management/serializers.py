@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from.models import Property, Appliance, Repairs, Investments, ApplianceApi, CustomUser
+from.models import Property, Appliance, Repairs, Investments, ApplianceApi
 from django.contrib.auth.models import User
 
 #this file tells us how to turn our model into JSON data
@@ -41,9 +41,9 @@ class ApplianceApiSerializer(serializers.ModelSerializer):
         model = ApplianceApi
         fields = '__all__'
 
-class CustomUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = '__all__'
+# class CustomUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = CustomUser
+#         fields = '__all__'
 
 
