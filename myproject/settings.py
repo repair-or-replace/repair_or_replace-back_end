@@ -87,12 +87,12 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'repair_or_replace',  # database
-        'USER': 'root',       # username
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'rr',  # database
+        'USER': 'postgres',       # username
         'PASSWORD': 'Tomatillo4!',   # pwd
-        'HOST': 'localhost',           # local
-        'PORT': '3306',                # port
+        'HOST': 'localhost',           # render
+        'PORT': '5432',                # port
     }
 }
 
