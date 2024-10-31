@@ -2,12 +2,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
-import bcrypt
+from django.contrib.auth.hashers import make_password
 
 class RegisterView(APIView):
     def post(self, request):
         # Retrieve fields from request data
         username = request.data.get('username')
+        first_name = request.data.get('first_name')
+        last_name = request.data.get('last_name')
         email = request.data.get('email')
         password = request.data.get('password')
         password_confirm = request.data.get('password_confirm')
@@ -22,8 +24,9 @@ class RegisterView(APIView):
         if User.objects.filter(email=email).exists():
             return Response({'message': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Hash the password and create user
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        # Use make_password to hash the password and create the user
+        hashed_password = make_password(password)
         User.objects.create(username=username, email=email, password=hashed_password)
 
         return Response({'message': 'User registered successfully'}, status=status.HTTP_201_CREATED)
+
