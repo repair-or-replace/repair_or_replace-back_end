@@ -28,6 +28,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 AUTH_KEY= os.environ.get("AUTH_KEY")
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ") if os.environ.get("ALLOWED_HOSTS") else ['127.0.0.1', 'localhost']
+# allows  front-end domain to access the API
+CORS_ALLOWED_ORIGINS = [
+    "https://your-frontend-domain.com",  # Replace with your front-end URL
+]
 
 
 
@@ -41,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',  # Add Django REST Framework
     'repair_management',  # Add app
 ]
@@ -50,6 +55,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
