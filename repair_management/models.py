@@ -4,19 +4,6 @@ from django.contrib.auth.models import User
 #models define the data structure of the app. they represent the tabels in your DB and define the fields and relationship between them
 #django uses models to generate SQL code to create and manipulate the corresponding DB tables
 
-class HomeSpy(models.Model):
-    make = models.CharField(max_length=50,null=True)
-    model = models.CharField(max_length=100,null=True)
-    serial = models.CharField(max_length=100,null=True)
-    description = models.CharField(max_length=250,null=True)
-    type = models.CharField(max_length=50,null=True)
-    color = models.CharField(max_length=50, null=True)
-    most_likely_year = models.IntegerField()
-    average_listed_price = models.DecimalField(max_digits=10, decimal_places=2)
-    full_date = models.DateTimeField()
-    
-    def __str__(self):
-        return f"{self.make} {self.model} {self.serial}"
 
 class ApplianceApi(models.Model):
     brand = models.CharField(max_length=50,null=True) #brand_name

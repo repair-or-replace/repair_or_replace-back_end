@@ -12,7 +12,7 @@ headers = {
 # url = "https://api.appliance-data.com/product?sku=JVW5301SJSS"
 # response = requests.get(url, headers=headers)
 
-model = 'JVW5301SJSS'
+model = 'PTD60EBSRWS'
 json_data = {
             'model': model
         }

@@ -24,3 +24,4 @@ tzdata==2024.2
 urllib3==2.2.3
 virtualenv==20.26.6
 waitress==3.0.1
+whitenoise==6.8.2
