@@ -27,7 +27,8 @@ load_dotenv()
 SECRET_KEY = os.environ.get('SECRET_KEY')
 AUTH_KEY= os.environ.get("AUTH_KEY")
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ") if os.environ.get("ALLOWED_HOSTS") else []
+
 
 
 # Application definition
