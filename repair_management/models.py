@@ -89,10 +89,8 @@ class Repairs(models.Model):
 
 class Investments(models.Model):
     INVESTMENT_CHOICES = [
-        ('replacement', 'Replacement'),
         ('maintenance', 'Maintenance'),
-        ('repair', 'Repair'),
-        ('upgrade', 'Upgrade')
+        ('enhancement', 'Enhancement')
     ]
     appliance = models.ForeignKey(Appliance, on_delete=models.CASCADE, related_name='investments')  # Use ForeignKey
     investment_type = models.CharField(max_length=25, choices=INVESTMENT_CHOICES)
