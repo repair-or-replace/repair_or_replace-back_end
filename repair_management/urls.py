@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from .views.views import (
+    UserDetailView,
     PropertyViewSet,
     ApplianceViewSet,
     RepairsViewSet,
@@ -27,6 +28,7 @@ router.register('users', UserViewSet)
 
 
 urlpatterns = [
+    path('user-profile/', UserDetailView.as_view(), name='user-profile'),
     path('', include(router.urls)),
     path('decode-appliance/', DecodeApplianceView.as_view(), name='decode-appliance'),
     path('add-appliance/', add_appliance_view, name='add_appliance'), 
