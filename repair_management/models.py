@@ -1,22 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import User 
+from datetime import timedelta
+
 
 #models define the data structure of the app. they represent the tabels in your DB and define the fields and relationship between them
 #django uses models to generate SQL code to create and manipulate the corresponding DB tables
 
-class AppApiInfo(models.Model):
-    make = models.CharField(max_length=50,null=True)
-    model = models.CharField(max_length=100,null=True)
-    serial = models.CharField(max_length=100,null=True)
-    description = models.CharField(max_length=250,null=True)
-    type = models.CharField(max_length=50,null=True)
-    color = models.CharField(max_length=50, null=True)
-    most_likely_year = models.IntegerField()
-    average_listed_price = models.DecimalField(max_digits=10, decimal_places=2)
-    full_date = models.DateTimeField()
+
+class ApplianceApi(models.Model):
+    brand = models.CharField(max_length=50,null=True) #brand_name
+    model = models.CharField(max_length=100,null=True) #sku
+    description = models.CharField(max_length=250,null=True) #name of item
+    category_name = models.CharField(max_length=50,null=True)
+    detail_category_name = models.CharField(max_length=250, null=True)
+    color = models.CharField(max_length=30,null=True)
+    product_image = models.CharField(max_length=250, null=True)
+    product_doc_1 = models.CharField(max_length=250, null=True)
+    product_doc_2 = models.CharField(max_length=250, null=True)
+    lowest_listed_price = models.DecimalField(max_digits=10, decimal_places=2)
+    home_depot_price = models.DecimalField(max_digits=10, decimal_places=2)
+    msrp = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
     
-def __str__(self):
-    return f"{self.make} {self.model} {self.serial}"
+    def __str__(self):
+        return f"{self.brand} {self.model}"
 
 class Property(models.Model):
     HOME_TYPE_CHOICES = [
@@ -28,7 +36,7 @@ class Property(models.Model):
     ]
 
     address_line_1 = models.CharField(max_length=100)
-    # address_line_2 = models.CharField(max_length=100, blank=True, null=True)
+    address_line_2 = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=20)
     state = models.CharField(max_length=2)
     zipcode = models.CharField(max_length=10)
@@ -47,10 +55,6 @@ class Property(models.Model):
             return self.user_uploaded_image.url
         return f'images/default_home_pic.jpeg'
     
-# class ApplianceType(models.Model):
-#     name = models.CharField(max_length=50, unique=True)
-#     default_image = models.CharField(max_length=250, default=)
-
 
 class Appliance(models.Model):
     STATUS_CHOICES = [
@@ -61,9 +65,8 @@ class Appliance(models.Model):
     ]
     name = models.CharField(max_length=255, default='default_name')
     appliance_type = models.CharField(max_length=200)
-    make = models.CharField(max_length=200,blank=True)
+    brand = models.CharField(max_length=200,blank=True)
     model = models.CharField(max_length=200,null=True,blank=True)
-    serial_number = models.CharField(max_length=200)
     property = models.ForeignKey('Property', on_delete=models.CASCADE, related_name='appliances')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appliances') 
     exp_end_of_life = models.DateField(blank=True,null=True)
@@ -71,6 +74,11 @@ class Appliance(models.Model):
     current_status = models.CharField(max_length=20, choices=STATUS_CHOICES) #
     cost = models.FloatField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    typical_lifespan_years = models.IntegerField(default=10)  # e.g., average lifespan in years
+
+    def expected_end_of_life(self):
+        """Calculates the expected end-of-life date for the appliance."""
+        return self.purchase_date + timedelta(days=self.typical_lifespan_years * 365)
 
     def __str__(self):
         return f"{self.name} ({self.model})"
@@ -82,16 +90,16 @@ class Repairs(models.Model):
     repaired_description = models.CharField(max_length=250)
     cost = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repairs')  # link to User
+
 
     def __str__(self):
         return f"{self.appliance} ({self.repair_date})"
 
 class Investments(models.Model):
     INVESTMENT_CHOICES = [
-        ('replacement', 'Replacement'),
         ('maintenance', 'Maintenance'),
-        ('repair', 'Repair'),
-        ('upgrade', 'Upgrade')
+        ('enhancement', 'Enhancement')
     ]
     appliance = models.ForeignKey(Appliance, on_delete=models.CASCADE, related_name='investments')  # Use ForeignKey
     investment_type = models.CharField(max_length=25, choices=INVESTMENT_CHOICES)
@@ -99,37 +107,9 @@ class Investments(models.Model):
     investment_description = models.CharField(max_length=250)
     cost = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='investments')  # link to User
+
 
     def __str__(self):
         return f"{self.appliance} ({self.investment_type})"
     
-
-# class CustomUser(models.Model):
-
-#     username = models.CharField(max_length=75)
-#     password = models.CharField(max_length=75)
-#     email = models.CharField(max_length=75)
-#     name = models.CharField(max_length=100)
-#     property_id = models.ForeignKey(Property, on_delete=models.SET_NULL, null=True)
-#     created_at = models.DateTimeField()
-
-#     def __str__(self):
-#         return f"CustomUser {self.id}: {self.username}"
-
-
-'''
-class CustomUser(models.Model):
-    id = models.IntegerField(primary_key=True)
-    username = models.CharField(max_length=75)
-    password = models.CharField(max_length=75)
-    email = models.CharField(max_length=75)
-    name = models.CharField(max_length=100)
-    property_id = models.ForeignKey(Property, on_delete=models.SET_NULL, null=True)
-    created_at = models.DateTimeField()
-    # link User model
-    django_user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return f"CustomUser {self.id}: {self.username}"
-
-'''
