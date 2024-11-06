@@ -90,7 +90,7 @@ class Repairs(models.Model):
     repaired_description = models.CharField(max_length=250)
     cost = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repairs')  # link to User
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repairs',null=True, blank=True)  # link to User
 
 
     def __str__(self):
@@ -107,7 +107,7 @@ class Investments(models.Model):
     investment_description = models.CharField(max_length=250)
     cost = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='investments')  # link to User
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='investments',null=True, blank=True)  # link to User
 
 
     def __str__(self):
