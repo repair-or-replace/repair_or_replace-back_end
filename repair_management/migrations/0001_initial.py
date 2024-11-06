@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 ('state', models.CharField(max_length=2)),
                 ('zipcode', models.CharField(max_length=10)),
                 ('home_type', models.CharField(choices=[('single', 'Single Family'), ('multi', 'Multi Family'), ('condo', 'Condo'), ('apartment', 'Apartment'), ('other', 'Other')], max_length=25)),
-                ('year_built', models.DateField()),
+                ('year_built', models.IntegerField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='properties', to=settings.AUTH_USER_MODEL)),
             ],
