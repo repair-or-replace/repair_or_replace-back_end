@@ -21,7 +21,6 @@ class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserDetailSerializer
 
-
     def get_serializer_context(self):
         return {"request": self.request}
         
@@ -43,23 +42,18 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
-
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
     serializer_class = PropertySerializer
-
 
 
 class ApplianceViewSet(viewsets.ModelViewSet):
     queryset = Appliance.objects.all()
     serializer_class = ApplianceSerializer
 
-
-
 class RepairsViewSet(viewsets.ModelViewSet):
     queryset = Repairs.objects.all()
     serializer_class = RepairsSerializer
-
 
 
 class InvestmentsViewSet(viewsets.ModelViewSet):
@@ -67,9 +61,7 @@ class InvestmentsViewSet(viewsets.ModelViewSet):
     serializer_class = InvestmentsSerializer
 
 
-
 class ApplianceApiViewSet(viewsets.ModelViewSet):
     queryset = ApplianceApi.objects.all()
     serializer_class = ApplianceApiSerializer
-
 

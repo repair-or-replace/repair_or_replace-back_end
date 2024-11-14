@@ -15,7 +15,6 @@ def add_appliance_view(request):
     print("add_appliance_view called")  # Debug print
     return render(request, 'add_appliance.html')
 
-
 @method_decorator(csrf_exempt, name='dispatch')
 class DecodeApplianceView(APIView):
     def post(self, request):
@@ -92,6 +91,7 @@ class DecodeApplianceView(APIView):
 
 
             Appliance.objects.create(
+                name=decoded_data[0].get('name'),  
                 appliance_type=decoded_data[0].get('category', {}).get('category_name'),
                 brand=decoded_data[0]['brand']['brand_name'],
                 model=decoded_data[0].get('sku'),

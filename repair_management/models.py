@@ -90,7 +90,7 @@ class Repairs(models.Model):
     repaired_description = models.CharField(max_length=250)
     cost = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repairs')  # link to User
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='repairs',null=True, blank=True)  # link to User
 
 
     def __str__(self):
@@ -98,10 +98,8 @@ class Repairs(models.Model):
 
 class Investments(models.Model):
     INVESTMENT_CHOICES = [
-        ('replacement', 'Replacement'),
         ('maintenance', 'Maintenance'),
-        ('repair', 'Repair'),
-        ('upgrade', 'Upgrade')
+        ('enhancement', 'Enhancement')
     ]
     appliance = models.ForeignKey(Appliance, on_delete=models.CASCADE, related_name='investments')  # Use ForeignKey
     investment_type = models.CharField(max_length=25, choices=INVESTMENT_CHOICES)
@@ -109,12 +107,12 @@ class Investments(models.Model):
     investment_description = models.CharField(max_length=250)
     cost = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='investments')  # link to User
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='investments',null=True, blank=True)  # link to User
 
     def __str__(self):
         return f"{self.appliance} ({self.investment_type})"
     
 
-
-
+    def __str__(self):
+        return f"{self.appliance} ({self.investment_type})"
+    
