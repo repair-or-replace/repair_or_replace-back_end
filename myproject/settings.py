@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',  # Add Django REST Framework
     'repair_management',  # Add app
+    'rest_framework.authtoken',
 ]
 
 
@@ -72,6 +73,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',  # For session-based login
         'rest_framework.authentication.TokenAuthentication',    # For token-based login
     ],
+    'DEFAULT_AUTHENTICATION_FAILED_RESPONSE': True,
+    # 'EXCEPTION_HANDLER': 'repair_management.custom_exceptions.custom_exception_handler',
 }
 
 
