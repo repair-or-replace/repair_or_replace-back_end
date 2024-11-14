@@ -67,7 +67,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',    # For token-based login
     ],
     'DEFAULT_AUTHENTICATION_FAILED_RESPONSE': True,
-    'EXCEPTION_HANDLER': 'repair_management.custom_exceptions.custom_exception_handler',
+    # 'EXCEPTION_HANDLER': 'repair_management.custom_exceptions.custom_exception_handler',
 }
 
 
