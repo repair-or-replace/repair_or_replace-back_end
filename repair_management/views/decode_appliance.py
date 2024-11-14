@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 from repair_management.models import Property, Appliance, ApplianceApi
 from django.conf import settings
 
+
 def add_appliance_view(request):
     print("add_appliance_view called")  # Debug print
     return render(request, 'add_appliance.html')

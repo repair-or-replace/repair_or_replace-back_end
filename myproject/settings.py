@@ -35,8 +35,6 @@ CORS_ALLOWED_ORIGINS = [
 
 
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -63,6 +61,19 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+# Django REST Framework Settings
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Require login globally
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',  # For session-based login
+        'rest_framework.authentication.TokenAuthentication',    # For token-based login
+    ],
+}
+
 
 ROOT_URLCONF = 'myproject.urls'
 

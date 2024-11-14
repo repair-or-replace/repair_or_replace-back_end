@@ -21,11 +21,8 @@ class ApplianceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appliance
-        fields = [
-            'id', 'name', 'appliance_type', 'brand', 'model', 'property', 'user',
-            'purchase_date', 'current_status', 'exp_end_of_life', 'repairs', 'investments', 
-            'total_repair_cost', 'total_investment_cost', 'repairs_exceed_cost'
-        ]
+        fields = '__all__'
+
 
     def get_repairs(self, obj):
         return RepairsSerializer(

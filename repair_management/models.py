@@ -109,6 +109,9 @@ class Investments(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='investments',null=True, blank=True)  # link to User
 
+    def __str__(self):
+        return f"{self.appliance} ({self.investment_type})"
+    
 
     def __str__(self):
         return f"{self.appliance} ({self.investment_type})"
