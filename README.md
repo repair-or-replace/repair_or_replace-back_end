@@ -304,3 +304,25 @@ POST request URL: http://127.0.0.1:8000/api/custom-users/
     "property_id": 1 ,
     "created_at": "2024-10-19T10:00:00Z"
 }
+
+
+
+Step 1: Configure Global Permissions and Authentication
+
+Step 2: Create Custom Permissions
+
+Step 3: Apply Permissions in Views
+
+Choosing the Right Permission
+Use AllowAny for public APIs.
+Use IsAuthenticated for APIs that require login.
+Use IsAdminUser for admin-only APIs.
+Use IsAuthenticatedOrReadOnly for APIs where unauthenticated users can only view data.
+Use DjangoModelPermissions for APIs tied to model-level permissions.
+Use custom permissions like IsOwnerOrReadOnly for advanced object-level access control.
+
+
+
+
+
+

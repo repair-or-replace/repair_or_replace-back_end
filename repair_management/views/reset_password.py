@@ -1,3 +1,4 @@
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -5,6 +6,7 @@ from django.contrib.auth.models import User
 import bcrypt
 
 class ResetPasswordView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         # Retrieve fields from request data
         username = request.data.get('username')
