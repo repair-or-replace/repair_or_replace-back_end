@@ -25,14 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
-AUTH_KEY= os.environ.get("AUTH_KEY")
+AUTH_KEY = os.environ.get("AUTH_KEY")
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ") if os.environ.get("ALLOWED_HOSTS") else ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(
+    " ") if os.environ.get("ALLOWED_HOSTS") else ['127.0.0.1', 'localhost']
 # allows  front-end domain to access the API
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8081",  # Replace with your front-end URL
+    "http://localhost:5173/",  # Replace with your front-end URL
 ]
-
 
 
 # Application definition
@@ -152,7 +152,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
