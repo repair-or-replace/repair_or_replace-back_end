@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token  # Import the Token model
 from django.contrib.auth import authenticate
+from rest_framework import status
+
 
 class LoginView(APIView):
     permission_classes = [AllowAny] 
