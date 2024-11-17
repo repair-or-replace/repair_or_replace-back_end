@@ -31,7 +31,7 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(
     " ") if os.environ.get("ALLOWED_HOSTS") else ['127.0.0.1', 'localhost']
 # allows  front-end domain to access the API
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173/",  # Replace with your front-end URL
+    "http://localhost:5173",  # Replace with your front-end URL
 ]
 
 
