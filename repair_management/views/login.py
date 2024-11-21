@@ -27,6 +27,6 @@ class LoginView(APIView):
         if user is not None:
             # Generate or get the token
             token, created = Token.objects.get_or_create(user=user)
-            return Response({"message": "Login successful", "token": token.key, "username":username}, status=200)
+            return Response({"message": "Login successful", "token": token.key, "username":username, "user_id": user.id}, status=200)
         else:
             return Response({"message": "Invalid credentials"}, status=401)
