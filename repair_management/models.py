@@ -73,6 +73,7 @@ class Appliance(models.Model):
     purchase_date = models.DateField()
     current_status = models.CharField(max_length=20, choices=STATUS_CHOICES) #
     cost = models.FloatField(blank=True,null=True)
+    product_image = models.CharField(max_length=250, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     typical_lifespan_years = models.IntegerField(default=10)  # e.g., average lifespan in years
 

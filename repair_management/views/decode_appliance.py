@@ -99,6 +99,7 @@ class DecodeApplianceView(APIView):
                 user=user_instance,
                 exp_end_of_life= '9999-12-31',
                 purchase_date= purchase_date,
+                product_image=decoded_data[0]['product_images'][0]['url'] if decoded_data[0]['product_images'] else None, 
                 current_status='working',  # default status is working
                 cost=decoded_data[0].get('price',{}).get('msrp',0),
         )
