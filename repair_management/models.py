@@ -63,9 +63,9 @@ class Appliance(models.Model):
         ('broken', 'Broken'),
         ('replaced', 'Replaced')
     ]
-    name = models.CharField(max_length=255, default='default_name')
-    appliance_type = models.CharField(max_length=200)
-    brand = models.CharField(max_length=200,blank=True)
+    name = models.CharField(max_length=255, default='default_name',blank=True, null=True)
+    appliance_type = models.CharField(max_length=200,blank=True, null=True)
+    brand = models.CharField(max_length=200,blank=True, null=True)
     model = models.CharField(max_length=200,null=True,blank=True)
     property = models.ForeignKey('Property', on_delete=models.CASCADE, related_name='appliances')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appliances') 
@@ -73,9 +73,9 @@ class Appliance(models.Model):
     purchase_date = models.DateField()
     current_status = models.CharField(max_length=20, choices=STATUS_CHOICES) #
     cost = models.FloatField(blank=True,null=True)
-    product_image = models.CharField(max_length=250, null=True)
+    product_image = models.CharField(max_length=250, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    typical_lifespan_years = models.IntegerField(default=10)  # e.g., average lifespan in years
+    typical_lifespan_years = models.IntegerField(default=10,blank=True, null=True)  # e.g., average lifespan in years
 
     def expected_end_of_life(self):
         """Calculates the expected end-of-life date for the appliance."""
