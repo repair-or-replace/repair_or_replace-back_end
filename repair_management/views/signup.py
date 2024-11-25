@@ -31,7 +31,14 @@ class RegisterView(APIView):
 
         # Use make_password to hash the password and create the user
         hashed_password = make_password(password)
-        User.objects.create(username=username, email=email, password=hashed_password)
+        # User.objects.create(username=username, email=email, password=hashed_password)
+        User.objects.create(
+            username=username,
+            first_name=first_name,
+            last_name=last_name,  # Include first_name and last_name here
+            email=email,
+            password=hashed_password
+        )
 
         return Response({'message': 'User registered successfully'}, status=status.HTTP_201_CREATED)
 
