@@ -7,7 +7,7 @@ from django.contrib.auth.hashers import make_password
 
 class ResetPasswordView(APIView):
     permission_classes = [AllowAny]
-
+    
     def post(self, request):
         # Retrieve fields from request data
         username = request.data.get('username')
@@ -21,9 +21,8 @@ class ResetPasswordView(APIView):
         try:
             # Retrieve user and update password
             user = User.objects.get(username=username)
-            user.password = make_password(new_password)  # Use make_password for consistent hashing
+            user.password = make_password(new_password)  # Use Django's make_password
             user.save()
-
             return Response({'message': 'Password reset successfully'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({'message': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
