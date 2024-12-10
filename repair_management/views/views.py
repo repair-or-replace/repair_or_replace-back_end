@@ -49,9 +49,26 @@ class UserPropertyViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+# class UserViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        user = self.get_object()
+
+        # Delete all associated with the user
+        user.properties.all().delete()
+        user.appliances.all().delete()
+        user.repairs.all().delete()
+        user.investments.all().delete()
+
+        # Finally, delete the user account
+        user.delete()
+        return Response({"detail": "User and associated data deleted successfully."}, status=204)
+
 
 
 class PropertyViewSet(viewsets.ModelViewSet):

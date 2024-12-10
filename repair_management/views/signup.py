@@ -4,7 +4,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
@@ -28,7 +31,14 @@ class RegisterView(APIView):
 
         # Use make_password to hash the password and create the user
         hashed_password = make_password(password)
-        User.objects.create(username=username, email=email, password=hashed_password)
+        # User.objects.create(username=username, email=email, password=hashed_password)
+        User.objects.create(
+            username=username,
+            first_name=first_name,
+            last_name=last_name,  # Include first_name and last_name here
+            email=email,
+            password=hashed_password
+        )
 
         return Response({'message': 'User registered successfully'}, status=status.HTTP_201_CREATED)
 

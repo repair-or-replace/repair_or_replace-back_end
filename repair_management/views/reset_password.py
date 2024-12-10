@@ -3,10 +3,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
-import bcrypt
+from django.contrib.auth.hashers import make_password
 
 class ResetPasswordView(APIView):
     permission_classes = [AllowAny]
+    
     def post(self, request):
         # Retrieve fields from request data
         username = request.data.get('username')
@@ -20,8 +21,7 @@ class ResetPasswordView(APIView):
         try:
             # Retrieve user and update password
             user = User.objects.get(username=username)
-            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-            user.password = hashed_password
+            user.password = make_password(new_password)  # Use Django's make_password
             user.save()
             return Response({'message': 'Password reset successfully'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
