@@ -12,7 +12,7 @@ from django.conf import settings
 
 
 def add_appliance_view(request):
-    print("add_appliance_view called")  # Debug print
+    print("add_appliance_view called")
     return render(request, 'add_appliance.html')
 
 
@@ -61,35 +61,29 @@ class DecodeApplianceView(APIView):
                 data = response.json()
                 decoded_data = data.get('data')
 
-                if decoded_data:
-                    # Save new decoded_data to ApplianceApi table
-                    existing_info = ApplianceApi.objects.create(
-                        brand=decoded_data[0]['brand']['brand_name'],
-                        model=decoded_data[0].get('sku'),
-                        description=decoded_data[0].get('name'),
-                        category_name=decoded_data[0].get(
-                            'category', {}).get('category_name'),
-                        detail_category_name=decoded_data[0].get(
-                            'detail_category', {}).get('detail_category_name'),
-                        color=decoded_data[0].get('color'),
-                        product_image=decoded_data[0]['product_images'][0][
-                            'url'] if decoded_data[0]['product_images'] else None,
-                        product_doc_1=decoded_data[0]['product_documents'][0][
-                            'url'] if decoded_data[0]['product_documents'] else None,
-                        product_doc_2=decoded_data[0]['product_documents'][1]['url'] if len(
-                            decoded_data[0]['product_documents']) > 1 else None,
-                        lowest_listed_price=decoded_data[0]["price"]["lap"].get(
-                            "lowest_price"),
-                        home_depot_price=decoded_data[0]["price"]["lap"].get(
-                            "homedepot_price"),
-                        msrp=decoded_data[0].get('price', {}).get('msrp', 0),
-                    )
-                else:
-                    return JsonResponse({'error': 'No data returned from the API'}, status=status.HTTP_404_NOT_FOUND)
+                # Save new decoded_data to ApplianceApi table
+                existing_info = ApplianceApi.objects.create(
+                    brand=decoded_data[0]['brand']['brand_name'],
+                    model=decoded_data[0].get('sku'),
+                    description=decoded_data[0].get('name'),
+                    category_name=decoded_data[0].get(
+                        'category', {}).get('category_name'),
+                    detail_category_name=decoded_data[0].get(
+                        'detail_category', {}).get('detail_category_name'),
+                    color=decoded_data[0].get('color'),
+                    product_image=decoded_data[0]['product_images'][0]['url'] if decoded_data[0]['product_images'] else None,
+                    product_doc_1=decoded_data[0]['product_documents'][0][
+                        'url'] if decoded_data[0]['product_documents'] else None,
+                    product_doc_2=decoded_data[0]['product_documents'][1]['url'] if len(
+                        decoded_data[0]['product_documents']) > 1 else None,
+                    lowest_listed_price=decoded_data[0]["price"]["lap"]["lowest_price"],
+                    home_depot_price=decoded_data[0]["price"]["lap"]["homedepot_price"],
+                    msrp=decoded_data[0].get('price', {}).get('msrp', 0),
+                )
             else:
                 return JsonResponse(response.json(), status=response.status_code)
-        # create  appliance entry
-        Appliance.objects.create(
+        # Create a new Appliance record
+        new_appliance = Appliance.objects.create(
             name=existing_info.description,
             appliance_type=existing_info.category_name,
             brand=existing_info.brand,
@@ -99,14 +93,17 @@ class DecodeApplianceView(APIView):
             exp_end_of_life='9999-12-31',
             purchase_date=purchase_date,
             product_image=existing_info.product_image,
-            current_status='working',  # Default status is working
+            current_status='working',  # default status is working
             cost=existing_info.msrp,
         )
 
-        return JsonResponse({'status': 'added', 'appliance_details': {
-            'name': existing_info.description,
-            'model': existing_info.model,
-            'brand': existing_info.brand
+        return JsonResponse({'status': 'added', 'appliance': {
+            'id': new_appliance.id,
+            'name': new_appliance.name,
+            'model': new_appliance.model,
+            'current_status': new_appliance.current_status,
+            'property': property_instance.id,
+            'user': user_instance.id
         }})
 
     def get(self, request):
