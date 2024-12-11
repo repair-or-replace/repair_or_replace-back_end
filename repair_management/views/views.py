@@ -16,6 +16,7 @@ from repair_management.serializers import (
 )
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from rest_framework.views import exception_handler
 
@@ -80,9 +81,20 @@ class ApplianceViewSet(viewsets.ModelViewSet):
     queryset = Appliance.objects.all()
     serializer_class = ApplianceSerializer
 
+# class RepairsViewSet(viewsets.ModelViewSet):
+#     queryset = Repairs.objects.all()
+#     serializer_class = RepairsSerializer
+
 class RepairsViewSet(viewsets.ModelViewSet):
     queryset = Repairs.objects.all()
     serializer_class = RepairsSerializer
+
+    def get_queryset(self):
+        # 获取查询参数 appliance
+        appliance_id = self.request.query_params.get('appliance')
+        if appliance_id:
+            return Repairs.objects.filter(appliance_id=appliance_id)  # 
+        return super().get_queryset()  # 
 
 
 class InvestmentsViewSet(viewsets.ModelViewSet):
