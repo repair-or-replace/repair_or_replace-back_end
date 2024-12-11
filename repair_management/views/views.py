@@ -90,17 +90,25 @@ class RepairsViewSet(viewsets.ModelViewSet):
     serializer_class = RepairsSerializer
 
     def get_queryset(self):
-        # 获取查询参数 appliance
+        #  appliance
         appliance_id = self.request.query_params.get('appliance')
         if appliance_id:
             return Repairs.objects.filter(appliance_id=appliance_id)  # 
         return super().get_queryset()  # 
 
 
+# class InvestmentsViewSet(viewsets.ModelViewSet):
+#     queryset = Investments.objects.all()
+#     serializer_class = InvestmentsSerializer
 class InvestmentsViewSet(viewsets.ModelViewSet):
     queryset = Investments.objects.all()
     serializer_class = InvestmentsSerializer
 
+    def get_queryset(self):
+        appliance_id = self.request.query_params.get('appliance')  #
+        if appliance_id:
+            return Investments.objects.filter(appliance_id=appliance_id)  # 
+        return super().get_queryset()
 
 class ApplianceApiViewSet(viewsets.ModelViewSet):
     queryset = ApplianceApi.objects.all()
