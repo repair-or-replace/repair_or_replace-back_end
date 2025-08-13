@@ -1,10 +1,32 @@
+# repair_management/models.py
+
 from django.db import models
 from django.contrib.auth.models import User 
 from datetime import timedelta
 
 
-#models define the data structure of the app. they represent the tabels in your DB and define the fields and relationship between them
-#django uses models to generate SQL code to create and manipulate the corresponding DB tables
+
+class Order(models.Model):  # 订单表
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    description = models.CharField(max_length=255)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Order #{self.id} - {self.user.username}"
+
+
+class Payment(models.Model):  # 付款记录表
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    paypal_order_id = models.CharField(max_length=255)
+    payer_email = models.EmailField()
+    status = models.CharField(max_length=100)
+    paid_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Payment for Order #{self.order.id}"
+
 
 
 class ApplianceApi(models.Model):
