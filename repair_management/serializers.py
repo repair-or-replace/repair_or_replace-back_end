@@ -1,18 +1,6 @@
-# repair_management/serializers.py
-
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Property, Appliance, Repairs, Investments, ApplianceApi, Order, Payment 
-
-class OrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = '__all__'
-
-class PaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment
-        fields = '__all__'
+from .models import Property, Appliance, Repairs, Investments, ApplianceApi 
 
 class RepairsSerializer(serializers.ModelSerializer):
     class Meta:
